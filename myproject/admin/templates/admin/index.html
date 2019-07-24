@@ -1,0 +1,124 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Admin Home{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb shadow-sm">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Overview</li>
+        </ol>
+    </nav>
+
+	<section>
+		<div class="row">
+			<div class="col-md-6 col-lg-6 col-xl-3">
+
+	            <div class="card shadow-sm">
+				    <div class="card-body p-1">
+					    <div class="d-flex flex-row d-flex justify-content-around align-items-end">
+
+						    <div class="p-3">
+							    <h5 class="display-4">
+                                    <i class="fa fa-wheelchair"></i>
+							    </h5>
+						    </div>
+
+						    <div class="text-right">
+							    <div class="d-flex flex-column bd-highlight mb-3">
+								    <div class="p-2"><strong>{{ patient_count }}</strong></div>
+								    <span class="p-2 badge badge-success">Patients <i class="fa fa-check-circle"></i></span>
+								</div>
+						    </div>
+						</div>
+
+				    </div>
+				</div>
+
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-xl-3">
+
+	            <div class="card shadow-sm">
+				    <div class="card-body p-1">
+					    <div class="d-flex flex-row d-flex justify-content-around align-items-end">
+
+						    <div class="p-3">
+							    <h5 class="display-4">
+                                    <i class="fa fa-user-md"></i>
+							    </h5>
+						    </div>
+
+						    <div class="text-right">
+							    <div class="d-flex flex-column bd-highlight mb-3">
+								    <div class="p-2"><strong>{{ doctor_count }}</strong></div>
+								    <span class="p-2 badge badge-primary">Doctors <i class="fa fa-check-circle"></i></span>
+								</div>
+						    </div>
+						</div>
+
+				    </div>
+				</div>
+
+            </div>
+
+			<div class="col-md-6 col-lg-6 col-xl-3">
+
+	            <div class="card shadow-sm">
+				    <div class="card-body p-1">
+					    <div class="d-flex flex-row d-flex justify-content-around align-items-end">
+
+						    <div class="p-3">
+							    <h5 class="display-4">
+                                    <i class="fa fa-user"></i>
+							    </h5>
+						    </div>
+
+						    <div class="text-right">
+							    <div class="d-flex flex-column bd-highlight mb-3">
+								    <div class="p-2"><strong>{{ receptionist_count }}</strong></div>
+								    <span class="p-2 badge badge-secondary">Receptionists <i class="fa fa-check-circle"></i></span>
+								</div>
+						    </div>
+						</div>
+
+				    </div>
+				</div>
+
+            </div>
+
+			<div class="col-md-6 col-lg-6 col-xl-3">
+
+	            <div class="card shadow-sm">
+				    <div class="card-body p-1">
+					    <div class="d-flex flex-row d-flex justify-content-around align-items-end">
+
+						    <div class="p-3">
+							    <h5 class="display-4">
+                                    <i class="fa fa-heartbeat" aria-hidden="true"></i>
+							    </h5>
+						    </div>
+
+						    <div class="text-right">
+							    <div class="d-flex flex-column bd-highlight mb-3">
+								    <div class="p-2"><strong>{{ appointment_count }}</strong></div>
+								    <span class="p-2 badge badge-warning text-white">Appointments <i class="fa fa-check-circle"></i></span>
+								</div>
+						    </div>
+						</div>
+
+				    </div>
+				</div>
+
+            </div>
+
+		</div>
+	</section>
+
+
+
+{% endblock %}

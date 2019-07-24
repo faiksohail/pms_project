@@ -1,0 +1,89 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Edit Schedule{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+	        <li class="breadcrumb-item"><a href="{{ url_for('admin.list_doctor') }}">Doctors</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Details</li>
+        </ol>
+    </nav>
+
+	<!-- ACTIONS -->
+	<section id="actions">
+	    <div class="container py-2 mb-3 bg-light">
+	        <div class="row">
+
+	            <div class="col-md-3">
+		            <a href="{{ url_for('admin.schedule', doctor_id=schedule.doctor_id) }}" class="btn btn-light btn-block">
+		                <i class="fas fa-arrow-left"></i> Back
+		            </a>
+	            </div>
+
+	             <div class="col-md-3">
+		            <!--submit button for the form-->
+		            <button type="submit" form="addScheduleForm" class="btn btn-success btn-block">
+			            <i class="fas fa-check"></i> Save Changes
+		            </button>
+	            </div>
+
+		        <div class="col-md-3">
+	                <a href="{{ url_for('admin.delete_schedule', schedule_id=schedule.id) }}" class="btn btn-danger btn-block">
+	                    <i class="fas fa-trash"></i> Delete Record
+	                </a>
+	            </div>
+
+	        </div>
+	    </div>
+	</section>
+
+	<!-- PROFILE -->
+	<section>
+	    <div class="container p-0">
+	        <div class="row">
+	            <div class="col">
+	                <div class="card">
+	                    <div class="card-header">
+	                        <h4>Edit</h4>
+	                    </div>
+	                    <div class="card-body">
+
+	                       {{ render_message() }}
+							<form id="addScheduleForm" method="POST">
+
+								{{ form.hidden_tag() }}
+
+								<div class="form-group">
+									{{ form.day.label }}
+									{{ form.day(class="form-control") }}
+								    {{ render_error(form.day) }}
+							    </div>
+
+								<div class="form-row">
+								    <div class="form-group col-md-6">
+										{{ form.start_time.label }}
+										{{ form.start_time(class="form-control") }}
+										{{ render_error(form.start_time) }}
+								    </div>
+								    <div class="form-group col-md-6">
+										{{ form.end_time.label }}
+										{{ form.end_time(class="form-control") }}
+										{{ render_error(form.end_time) }}
+								    </div>
+							    </div>
+
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+
+{% endblock %}

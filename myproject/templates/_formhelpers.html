@@ -1,0 +1,24 @@
+{% macro render_error(field) %}
+    {% if field.errors %}
+        <ul class="text-danger">
+        {% for error in field.errors %}
+            <li><small id="err">{{ error }}</small></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_message() %}
+    <div class="container" style="min-height:100% width:80%">
+    {% for message in get_flashed_messages() %}
+        {% if message %}
+            <div id="msg" class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endmacro %}

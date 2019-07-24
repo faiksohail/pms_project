@@ -1,0 +1,609 @@
+{% extends 'doctor/base_doctor.html' %}
+
+{% block title %}Appointments{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('doctor.index') }}">Dashboard</a></li>
+	        <li class="breadcrumb-item"><a href="{{ url_for('doctor.appointments') }}">Appointments</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Patient</li>
+        </ol>
+    </nav>
+
+	<section id="basicDetails">
+        <div class="card border-0 shadow-sm">
+
+	        <div class="card-body">
+		        <div class="row">
+
+			        <div class="col-md-5 border-right">
+				        <div class="row">
+
+					        <div class="col-4">
+						        <div class="d-flex justify-content-center">
+						            <h1 class="display-1"><i class="fas fa-user-circle"></i></h1>
+					            </div>
+					        </div>
+
+					        <div class="col">
+						        <div class="m-1">
+									<h3>{{ patient.name }}</h3>
+							        <span><strong>Patient ID :</strong> {{ patient.user_id }}</span>
+						        </div>
+					        </div>
+
+				        </div>
+
+			        </div>
+
+			        <div class="col-md-7">
+						<dl class="row">
+
+							<dt class="col-sm-4">Phone:</dt>
+							<dd class="col-sm-8">{{ patient.contact }}</dd>
+
+							<dt class="col-sm-4">Email:</dt>
+							<dd class="col-sm-8">{{ patient.user.email }}</dd>
+
+							<dt class="col-sm-4">Date of Birth:</dt>
+							<dd class="col-sm-8">{{ patient.dob.strftime('%d-%m-%Y') }}</dd>
+
+							<dt class="col-sm-4">Address:</dt>
+							<dd class="col-sm-8">{{ patient.address }}, {{ patient.city }}</dd>
+
+							<dt class="col-sm-4">Gender:</dt>
+							<dd class="col-sm-8">{{ patient.gender | capitalize}}</dd>
+
+						</dl>
+			        </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+	</section>
+
+	<section id="tabs">
+		<div class="card border-0 shadow-sm">
+			<div class="card-body p-0">
+
+				<ul class="nav nav-tabs bg-white border-top">
+
+				    <li class="nav-item">
+					    <a class="nav-link" href="{{ url_for('doctor.patient_details', patient_id=patient.id, appointment_id=current_appointment.id) }}">Previous Appointments</a>
+				    </li>
+
+				    <li class="nav-item">
+				        <a class="nav-link active"  href="{{ url_for('doctor.add_record', patient_id=patient.id, appointment_id=current_appointment.id) }}">New Medical Record</a>
+				    </li>
+
+				</ul>
+
+			</div>
+		</div>
+	</section>
+
+	{% if current_appointment.date_of_visit == today %}
+
+		<section id="addRecords">
+			<!--record-->
+			<div class="card border-0 shadow-sm mt-3">
+
+		        <div class="card-body">
+			        <h5 class="card-title">New Medical Record</h5>
+
+			         <hr>
+
+			        {{ render_message() }}
+			        <form method="POST">
+
+				        {{ form1.hidden_tag() }}
+
+				        <div class="form-row">
+						    <div class="form-group col-md-6">
+								{{ form1.symptoms.label }}
+								{{ form1.symptoms(class="form-control") }}
+								{{ render_error(form1.symptoms) }}
+						    </div>
+						    <div class="form-group col-md-6">
+								{{ form1.disease.label }}
+								{{ form1.disease(class="form-control") }}
+								{{ render_error(form1.disease) }}
+						    </div>
+	                    </div>
+
+	                    <div class="form-group">
+							{{ form1.description.label }}
+							{{ form1.description(class="form-control") }}
+							{{ render_error(form1.description) }}
+	                    </div>
+
+				        <div class="form-group">
+					        {{ form1.submit(class="btn btn-primary") }}
+				        </div>
+
+			        </form>
+		        </div>
+
+			</div>
+
+			<!--vitals-->
+			<div class="card border-0 shadow-sm mt-3">
+
+		        <div class="card-body">
+			        <h5 class="card-title">Vitals</h5>
+
+			         <hr>
+
+			        {{ render_message() }}
+			        <form method="POST">
+
+				        {{ form2.hidden_tag() }}
+
+				        <div class="form-row">
+						    <div class="form-group col-md-4">
+								{{ form2.bp_systolic.label }}
+								{{ form2.bp_systolic(class="form-control", id="select1") }}
+								{{ render_error(form2.bp_systolic) }}
+						    </div>
+
+						    <div class="form-group col-md-4">
+								{{ form2.bp_diastolic.label }}
+								{{ form2.bp_diastolic(class="form-control", id="select2") }}
+								{{ render_error(form2.bp_diastolic) }}
+						    </div>
+
+					        <div class="form-group col-md-4">
+								{{ form2.temperature.label }}
+						        <div class="input-group">
+									{{ form2.temperature(class="form-control") }}
+								    <div class="input-group-append">
+									    <span class="input-group-text"><span>&#176;</span>F</span>
+								    </div>
+						        </div>
+								{{ render_error(form2.temperature) }}
+						    </div>
+	                    </div>
+
+				        <div class="form-row">
+						    <div class="form-group col-md-4">
+								{{ form2.pulse.label }}
+							    <div class="input-group">
+									{{ form2.pulse(class="form-control") }}
+								    <div class="input-group-append">
+									    <span class="input-group-text">bpm</span>
+								    </div>
+							    </div>
+						        {{ render_error(form2.pulse) }}
+						    </div>
+						    <div class="form-group col-md-4">
+								{{ form2.weight.label }}
+							    <div class="input-group">
+									{{ form2.weight(class="form-control") }}
+								    <div class="input-group-append">
+									    <span class="input-group-text">Kg</span>
+								    </div>
+							    </div>
+								{{ render_error(form2.weight) }}
+						    </div>
+					        <div class="form-group col-md-4">
+								{{ form2.height.label }}
+						        <div class="input-group">
+									{{ form2.height(class="form-control") }}
+								    <div class="input-group-append">
+									    <span class="input-group-text">cm</span>
+								    </div>
+							    </div>
+								{{ render_error(form2.height) }}
+						    </div>
+	                    </div>
+
+				        <div class="form-group">
+					        {{ form2.submit(class="btn btn-primary") }}
+				        </div>
+
+			        </form>
+		        </div>
+
+			</div>
+
+			<!--prescription-->
+			<div class="card border-0 shadow-sm mt-3">
+
+		        <div class="card-body">
+		            <h5 class="card-title d-inline">Prescription</h5>
+
+			        <hr>
+
+			        <!-- Button trigger add modal -->
+					<button type="button" class="btn btn-outline-primary btn-sm float-right" data-toggle="modal" data-target="#addPrescriptionModal">
+						Add Prescription
+					</button>
+
+			        <div class="table-responsive">
+
+			            <table class="table table-borderless">
+						    <thead>
+							    <tr>
+							        <th scope="col">#</th>
+							        <th scope="col">Name</th>
+							        <th scope="col">Quantity</th>
+							        <th scope="col">Directions</th>
+							        <th scope="col">Actions</th>
+							    </tr>
+						    </thead>
+
+						    <tbody>
+						        {% for entry in patient_prescription %}
+						        <tr>
+							        <th scope="row">{{ loop.index }}</th>
+							        <td>{{ entry.name | capitalize }}</td>
+							        <td>{{ entry.quantity }}</td>
+							        <td>{{ entry.directions | capitalize }}</td>
+							        <td>
+								        <button type="button" id="trigger_p{{ entry.id }}" class="badge badge-success" data-toggle="modal" data-target="#updatePrescriptionModal">
+											<i class="fa fa-edit"></i> Edit
+										</button>
+								         <button type="button" id="delete_p{{ entry.id }}" class="badge badge-danger" data-toggle="modal" data-target="#deletePrescriptionModal">
+											<i class="fa fa-trash"></i> Delete
+										</button>
+							        </td>
+						        </tr>
+						        {% endfor %}
+						    </tbody>
+						</table>
+
+			        </div>
+
+		        </div>
+			</div>
+
+			<!--tests-->
+			<div class="card border-0 shadow-sm mt-3">
+
+		        <div class="card-body">
+		            <h5 class="card-title d-inline">Test</h5>
+
+			        <hr>
+
+			        <!-- Button trigger add modal -->
+					<button type="button" class="btn btn-outline-primary btn-sm float-right" data-toggle="modal" data-target="#addTestModal">
+						Add Test
+					</button>
+
+			        <div class="table-responsive">
+
+			            <table class="table table-borderless">
+						    <thead>
+							    <tr>
+							        <th scope="col">#</th>
+							        <th scope="col">Name</th>
+							        <th scope="col">Details</th>
+							        <th scope="col">Actions</th>
+							    </tr>
+						    </thead>
+
+						    <tbody>
+						        {% for entry in patient_test %}
+						        <tr>
+							        <th scope="row">{{ loop.index }}</th>
+							        <td>{{ entry.name | capitalize }}</td>
+							        <td>{{ entry.details | capitalize }}</td>
+							        <td>
+								        <button type="button" id="trigger_t{{ entry.id }}" class="badge badge-success" data-toggle="modal" data-target="#updateTestModal">
+											<i class="fa fa-edit"></i> Edit
+										</button>
+								         <button type="button" id="delete_t{{ entry.id }}" class="badge badge-danger" data-toggle="modal" data-target="#deleteTestModal">
+											<i class="fa fa-trash"></i> Delete
+										</button>
+							        </td>
+						        </tr>
+						        {% endfor %}
+						    </tbody>
+						</table>
+
+			        </div>
+
+		        </div>
+			</div>
+
+		</section>
+
+	{% else %}
+		<div class="card border-0 shadow-sm mt-3">
+	        <div class="card-body">
+		        <h5 class="card-title text-center text-muted">No Appointment scheduled for today</h5>
+	        </div>
+		</div>
+	{% endif %}
+
+	<!-- add prescription modal -->
+	<div class="modal fade" id="addPrescriptionModal">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">Add Prescription</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	             </div>
+
+	            <div class="modal-body">
+	                {{ render_message() }}
+			        <form method="POST">
+
+				        {{ form3.hidden_tag() }}
+
+				        <div class="form-group">
+							{{ form3.name.label }}
+							{{ form3.name(class="form-control") }}
+							{{ render_error(form3.name) }}
+					    </div>
+
+				        <div class="form-group">
+							{{ form3.quantity.label }}
+							{{ form3.quantity(class="form-control") }}
+							{{ render_error(form3.quantity) }}
+					    </div>
+
+				        <div class="form-group">
+							{{ form3.directions.label }}
+							{{ form3.directions(class="form-control") }}
+							{{ render_error(form3.directions) }}
+					    </div>
+
+				        <div class="form-group">
+					        {{ form3.submit(class="btn btn-primary") }}
+				        </div>
+			        </form>
+	            </div>
+
+	        </div>
+	    </div>
+	</div>
+
+	<!-- update prescription modal -->
+	<div class="modal fade" id="updatePrescriptionModal">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">Edit Prescription</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	             </div>
+
+	            <div class="modal-body">
+	                {{ render_message() }}
+			        <form id="pModalForm" method="POST">
+
+				        {{ form4.hidden_tag() }}
+
+				        <div class="form-group">
+							{{ form4.name.label }}
+							{{ form4.name(class="form-control", id="name") }}
+							{{ render_error(form4.name) }}
+					    </div>
+
+				        <div class="form-group">
+							{{ form4.quantity.label }}
+							{{ form4.quantity(class="form-control", id="quantity") }}
+							{{ render_error(form4.quantity) }}
+					    </div>
+
+				        <div class="form-group">
+							{{ form4.directions.label }}
+							{{ form4.directions(class="form-control", id="directions") }}
+							{{ render_error(form4.directions) }}
+					    </div>
+
+				        <div class="form-group">
+					       <input class="btn btn-secondary" id="submit" type="submit" value="Save Changes">
+				        </div>
+
+			        </form>
+	            </div>
+
+	        </div>
+	    </div>
+	</div>
+
+	<!-- delete prescription modal -->
+	<div class="modal fade" id="deletePrescriptionModal">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header bg-danger">
+					<h5 class="modal-title">Confirm Delete</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+				<div class="modal-body">
+					Are you sure you want to delete the prescription?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<form id="pDeleteForm" method="POST">
+						<input class="btn btn-danger" type="submit" value="Delete">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- add test modal -->
+	<div class="modal fade" id="addTestModal">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">Add Test</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	             </div>
+
+	            <div class="modal-body">
+	                {{ render_message() }}
+			        <form method="POST">
+
+				        {{ form5.hidden_tag() }}
+
+				        <div class="form-group">
+							{{ form5.test_name.label }}
+							{{ form5.test_name(class="form-control") }}
+							{{ render_error(form5.test_name) }}
+					    </div>
+
+				        <div class="form-group">
+							{{ form5.test_details.label }}
+							{{ form5.test_details(class="form-control") }}
+							{{ render_error(form5.test_details) }}
+					    </div>
+
+				        <div class="form-group">
+					        {{ form5.submit(class="btn btn-primary") }}
+				        </div>
+			        </form>
+	            </div>
+
+	        </div>
+	    </div>
+	</div>
+
+	<!-- update test modal -->
+	<div class="modal fade" id="updateTestModal">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">Edit Test</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	             </div>
+
+	            <div class="modal-body">
+	                {{ render_message() }}
+			        <form id="tModalForm" method="POST">
+
+				        {{ form6.hidden_tag() }}
+
+				        <div class="form-group">
+							{{ form6.test_name.label }}
+							{{ form6.test_name(class="form-control", id="test_name") }}
+							{{ render_error(form6.test_name) }}
+					    </div>
+
+				        <div class="form-group">
+							{{ form6.test_details.label }}
+							{{ form6.test_details(class="form-control", id="test_details") }}
+							{{ render_error(form6.test_details) }}
+					    </div>
+
+				        <div class="form-group">
+					        <input class="btn btn-secondary" type="submit" value="Save Changes">
+				        </div>
+			        </form>
+	            </div>
+
+	        </div>
+	    </div>
+	</div>
+
+	<!-- delete test modal -->
+	<div class="modal fade" id="deleteTestModal">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header bg-danger">
+					<h5 class="modal-title">Confirm Delete</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+				<div class="modal-body">
+					Are you sure you want to delete the test?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<form id="tDeleteForm" method="POST">
+						<input class="btn btn-danger" type="submit" value="Delete">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block script %}
+	<script>
+	    $('#select1 option:first').attr('disabled','disabled');
+	    $('#select2 option:first').attr('disabled','disabled');
+	</script>
+
+	<script>
+	{% for entry in patient_prescription if patient_prescription %}
+		$('#trigger_p{{ entry.id }}').click(function() {
+
+			$('#updatePrescriptionModal #name').val('{{ entry.name }}');
+			$('#updatePrescriptionModal #quantity').val({{ entry.quantity }});
+			$('#updatePrescriptionModal #directions').val('{{ entry.directions }}');
+
+			$('#pModalForm').attr('action', '{{ url_for('doctor.update_prescription', prescription_id=entry.id) }}');
+
+		});
+	{% endfor %}
+	</script>
+
+	<script>
+	{% for entry in patient_prescription if patient_prescription %}
+		$('#delete_p{{ entry.id }}').click(function() {
+
+			$('#pDeleteForm').attr('action', '{{ url_for('doctor.delete_prescription', prescription_id=entry.id) }}');
+
+		});
+	{% endfor %}
+	</script>
+
+	<script>
+		var err = $('#err').text();
+		if (err)
+		{
+			$("#addPrescriptionModal").modal('show');
+		}
+		else
+		{
+			$("#addPrescriptionModal").modal('hide');
+		}
+	</script>
+
+	<script>
+	{% for entry in patient_test if patient_test %}
+		$('#trigger_t{{ entry.id }}').click(function() {
+
+			$('#updateTestModal #test_name').val('{{ entry.name }}');
+			$('#updateTestModal #test_details').val('{{ entry.details }}');
+
+			$('#tModalForm').attr('action', '{{ url_for('doctor.update_test', test_id=entry.id) }}');
+
+		});
+	{% endfor %}
+	</script>
+
+	<script>
+	{% for entry in patient_test if patient_test %}
+		$('#delete_t{{ entry.id }}').click(function() {
+
+			$('#tDeleteForm').attr('action', '{{ url_for('doctor.delete_test', test_id=entry.id) }}');
+
+		});
+	{% endfor %}
+	</script>
+
+
+{% endblock %}

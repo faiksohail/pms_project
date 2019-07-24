@@ -1,0 +1,71 @@
+{% extends 'receptionist/base_receptionist.html' %}
+
+{% block title %}Make Appointment{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('receptionist.index') }}">Dashboard</a></li>
+	        <li class="breadcrumb-item"><a href="{{ url_for('receptionist.available_doctors') }}">Available Doctors</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Appointment</li>
+        </ol>
+    </nav>
+
+	<section id="addAppointment">
+        <div class="card mb-3">
+	        <div class="card-header">
+		        <i class="fas fa-table"></i><span> Dr. {{ doctor_name }}</span>
+	        </div>
+            <div class="card-body">
+
+	            {{ render_message() }}
+	            <form method="POST">
+
+		            {{ form.hidden_tag() }}
+
+		            <div class="form-group">
+						{{ form.date.label }}
+						{{ form.date(class="form-control", readonly='readonly') }}
+                    </div>
+
+				    <div class="form-group">
+						{{ form.start_time.label }}
+						{{ form.start_time(class="form-control", readonly='readonly') }}
+				    </div>
+
+		            <div class="form-group">
+						{{ form.slot.label }}
+			            <div class="input-group">
+							{{ form.slot(class="form-control") }}
+				            <div class="input-group-append">
+						        <span class="input-group-text">minutes</span>
+						    </div>
+			            </div>
+						{{ render_error(form.slot) }}
+				    </div>
+
+		             <div class="form-group">
+						{{ form.patient.label }}
+						{{ form.patient(class="form-control", id="select") }}
+						{{ render_error(form.patient) }}
+                    </div>
+
+	                {{ form.submit(class="btn btn-primary mt-3") }}
+
+                </form>
+            </div>
+        </div>
+	</section>
+
+{% endblock %}
+
+{% block script %}
+	<script>
+	    $('#select option:first').attr('disabled','disabled')
+	</script>
+{% endblock %}
+

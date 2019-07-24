@@ -1,0 +1,140 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Edit Schedule{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+	        <li class="breadcrumb-item"><a href="{{ url_for('admin.list_appointment') }}">Appointments</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit appointment</li>
+        </ol>
+    </nav>
+
+	<!-- ACTIONS -->
+	<section id="actions">
+	    <div class="container py-2 mb-3 bg-light">
+	        <div class="row">
+
+	            <div class="col-md-3">
+		            <a href="{{ url_for('admin.list_appointment') }}" class="btn btn-light btn-block">
+		                <i class="fas fa-arrow-left"></i> Back
+		            </a>
+	            </div>
+
+	             <div class="col-md-3">
+		            <!--submit button for the form-->
+		            <button type="submit" form="AppointmentForm" class="btn btn-success btn-block">
+			            <i class="fas fa-check"></i> Save Changes
+		            </button>
+	            </div>
+
+		        <div class="col-md-3">
+	                <a href="#" class="btn btn-danger btn-block" data-toggle="modal" data-target="#deleteModal">
+	                    <i class="fas fa-trash"></i> Delete Record
+	                </a>
+	            </div>
+
+	        </div>
+	    </div>
+	</section>
+
+	<section>
+	    <div class="container p-0">
+	        <div class="row">
+	            <div class="col">
+	                <div class="card">
+	                    <div class="card-header">
+	                        <h4>Edit</h4>
+	                    </div>
+	                    <div class="card-body">
+
+	                        {{ render_message() }}
+		                    <form id="AppointmentForm" method="POST">
+
+								{{ form.hidden_tag() }}
+
+					            <div class="form-group">
+									{{ form.date.label }}
+									{{ form.date(class="form-control", readonly='readonly') }}
+						            {{ render_error(form.date) }}
+			                    </div>
+
+			                    <div class="form-row">
+								    <div class="form-group col-md-6">
+										{{ form.start_time.label }}
+										{{ form.start_time(class="form-control", readonly='readonly') }}
+									    {{ render_error(form.start_time) }}
+								    </div>
+
+				                    <div class="form-group col-md-6">
+					                    {{ form.end_time.label }}
+					                    {{ form.end_time(class="form-control", readonly='readonly') }}
+					                    {{ render_error(form.end_time) }}
+								    </div>
+			                    </div>
+
+			                     <div class="form-group">
+									{{ form.slot.label }}
+						            <div class="input-group">
+										{{ form.slot(class="form-control") }}
+							            <div class="input-group-append">
+									        <span class="input-group-text">minutes</span>
+									    </div>
+						            </div>
+									{{ render_error(form.slot) }}
+							    </div>
+
+			                    <div class="form-group">
+									{{ form.patient.label }}
+									{{ form.patient(class="form-control", id="select") }}
+									{{ render_error(form.patient) }}
+			                    </div>
+
+			                    <div class="form-group">
+				                    {{ form.status.label }}
+				                    {% for subfield in form.status %}
+					                    <div class="form-check">
+						                    {{ subfield(class="form-check-input") }}
+							                {{ subfield.label(class="form-check-label") }}
+					                    </div>
+				                    {% endfor %}
+				                    {{ render_error(form.status) }}
+			                    </div>
+
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+
+	<!-- DELETE MODAL -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header bg-danger">
+					<h5 class="modal-title" id="deleteModalCenterTitle">Confirm Delete</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+				<div class="modal-body">
+					Are you sure you want to delete the record from the database?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<form action="{{ url_for('admin.delete_appointment', appointment_id=appointment.id) }}" method="POST">
+						<input class="btn btn-danger" type="submit" value="Delete">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

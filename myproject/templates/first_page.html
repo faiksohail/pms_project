@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}PMS{% endblock %}
+
+{% block body %}
+
+    <nav id="topNavbar" class="navbar navbar-expand-sm shadow-sm">
+        <span class="navbar-brand mb-0 h1">
+            <img src="{{ url_for('static', filename='images/icon.jpg') }}" class="d-inline-block align-top brand-img" alt="">
+            C-PMS
+        </span>
+        <ul class="navbar-nav ml-auto">
+			<li class="nav-item mr-4">
+                <a class="nav-link" href="{{ url_for('register') }}"><i class="far fa-address-book"></i> Register</a>
+            </li>
+		</ul>
+	</nav>
+
+    <div class="main">
+        <div class="showcase">
+            <h1>Welcome to Patient Management System</h1>
+        </div>
+
+        <section id="login-cards" class="login-cards py-5">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-4 mb-4 text-center">
+                        <div class="card shadow-sm">
+                            <div class="card-body p-4">
+
+                                <h5 class="display-4"><i class="fa fa-user-plus fa-2x"></i></h5>
+
+                                <h5 class="card-title my-3">Patient Login</h5>
+
+                                <a href="{{ url_for('patient.login') }}" class="py-2 px-4 badge badge-primary">Click Here</a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4 text-center">
+                        <div class="card shadow-sm">
+                            <div class="card-body p-4">
+
+                                <h5 class="display-4"><i class="fa fa-user-md fa-2x"></i></h5>
+
+                                <h5 class="card-title my-3">Doctor Login</h5>
+
+                                <a href="{{ url_for('doctor.login') }}" class="py-2 px-4 badge badge-primary">Click Here</a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4 text-center">
+                        <div class="card shadow-sm">
+                            <div class="card-body p-4">
+
+                                <h5 class="display-4"><i class="fa fa-user fa-2x"></i></h5>
+
+                                <h5 class="card-title my-3">Receptionist Login</h5>
+
+                                <a href="{{ url_for('receptionist.login') }}" class="py-2 px-4 badge badge-primary">Click Here</a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+{% endblock %}

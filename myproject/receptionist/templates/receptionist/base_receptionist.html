@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!--main navbar-->
+<nav id="topNavbar" class="navbar navbar-expand-sm navbar-dark shadow-sm">
+
+	<span class="navbar-brand mb-0 h1">
+        <img src="{{ url_for('static', filename='images/icon.jpg') }}" class="brand-img d-inline-block align-top" alt="">
+        C-PMS
+    </span>
+	<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarCollapse">
+		<ul class="navbar-nav ml-auto">
+
+	        <li class="nav-item dropdown mr-3">
+	            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+	            <i class="fas fa-user"></i> Welcome
+	            </a>
+	            <div class="dropdown-menu">
+		            <a href="{{ url_for('receptionist.account') }}" class="dropdown-item">
+		                <i class="fas fa-user-circle"></i> Profile
+		            </a>
+		            <a href="{{ url_for('receptionist.change_password') }}" class="dropdown-item">
+		                <i class="fas fa-cog"></i> Settings
+		            </a>
+	            </div>
+	        </li>
+
+	        <li class="nav-item">
+	            <a href="{{ url_for('receptionist.logout') }}" class="nav-link">
+	            <i class="fas fa-user-times"></i> Logout
+	            </a>
+	        </li>
+		</ul>
+	</div>
+
+</nav>
+
+<!--sidebar-->
+<div class="container-fluid">
+    <div class="row">
+
+        <div id="sideNavbar" class="col-md-2 p-1 border-right border-bottom shadow-sm">
+
+            <ul class="navbar-nav my-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('receptionist.index') }}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i><span class="icon-label"> Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('receptionist.add_patient')}}">
+                        <i class="fa fa-wheelchair"></i><span class="icon-label"> Add Patient</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('receptionist.list_patient')}}">
+                        <i class="fa fa-table"></i><span class="icon-label"> List Patient</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('receptionist.add_doctor')}}">
+                        <i class="fa fa-user-md"></i><span class="icon-label"> Add Doctor</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('receptionist.list_doctor')}}">
+                        <i class="fa fa-table"></i><span class="icon-label"> List Doctor</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('receptionist.available_doctors')}}">
+                        <i class="fa fa-calendar"></i><span class="icon-label"> Add Appointment</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('receptionist.list_appointment')}}">
+                        <i class="fa fa-table"></i><span class="icon-label"> List Appointments</span>
+                    </a>
+                </li>
+
+		        <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('receptionist.appointment_request')}}">
+                        <i class="fas fa-tasks"></i><span class="icon-label"> Appointment Requests</span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+        <div id="content" class="col-md-10 p-0 m-0">
+            <div class="container-fluid p-3">
+				{% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+

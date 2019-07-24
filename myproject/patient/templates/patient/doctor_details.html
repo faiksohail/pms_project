@@ -1,0 +1,108 @@
+{% extends 'patient/base_patient.html' %}
+
+{% block title %}Doctor{% endblock %}
+
+{% block content %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb shadow-sm">
+            <li class="breadcrumb-item"><a href="{{ url_for('patient.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Doctor</li>
+        </ol>
+    </nav>
+
+	<section id="basicDetails">
+        <div class="card border-0 shadow-sm">
+
+	        <div class="card-body">
+		        <div class="row">
+
+			        <div class="col-md-5 border-right">
+				        <div class="row">
+
+					        <div class="col-4">
+						        <div class="d-flex justify-content-center">
+						            <h1 class="display-1"><i class="fas fa-user-circle"></i></h1>
+					            </div>
+					        </div>
+
+					        <div class="col">
+						        <div class="m-1">
+									<h3>Dr. {{ doctor.name }}</h3>
+							        <div class="text-muted">
+								        {% for row in doctor.specialization %}
+						                    {{ row.name | capitalize }}{% if not loop.last %},{% endif %}
+						                {% endfor %}
+							        </div>
+
+							        <div class="text-muted">
+								        {% for row in doctor.degree %}
+						                    {{ row.name }}{% if not loop.last %},{% endif %}
+						                {% endfor %}
+							        </div>
+
+						        </div>
+					        </div>
+
+				        </div>
+
+			        </div>
+
+			        <div class="col-md-7">
+						<dl class="row ml-2">
+
+							<dt class="col-sm-4">Phone:</dt>
+							<dd class="col-sm-8">{{ doctor.contact }}</dd>
+
+							<dt class="col-sm-4">Email:</dt>
+							<dd class="col-sm-8">{{ doctor.user.email }}</dd>
+
+							<dt class="col-sm-4">Date of Birth:</dt>
+							<dd class="col-sm-8">{{ doctor.dob.strftime('%d-%m-%Y') }}</dd>
+
+							<dt class="col-sm-4">Address:</dt>
+							<dd class="col-sm-8">{{ doctor.address }}, {{ doctor.city }}</dd>
+
+							<dt class="col-sm-4">Gender:</dt>
+							<dd class="col-sm-8">{{ doctor.gender | capitalize}}</dd>
+
+						</dl>
+			        </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+	</section>
+
+	<section id="ScheduleDetails">
+        <div class="card border-0 shadow-sm mt-3">
+
+	        <div class="card-body">
+		        <h5 class="card-title">Schedule</h5>
+
+		        <hr>
+
+		        {% for entry in doctor.schedule %}
+			        <dl class="row">
+
+						<dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+						<dd class="col-11">
+							<span class="font-weight-bold">{{ entry.day | capitalize }}</span>
+							<p class="text-muted">
+								From <span class="mx-2">{{ entry.start_time.strftime('%I:%M %p') }}</span>
+								to <span class="mx-2">{{ entry.end_time.strftime('%I:%M %p') }}</span>
+							</p>
+						</dd>
+
+			        </dl>
+		        {% endfor %}
+
+	        </div>
+
+        </div>
+	</section>
+
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends 'receptionist/base_receptionist.html' %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css"/>
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block title %}Schedule{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('receptionist.index') }}">Dashboard</a></li>
+	        <li class="breadcrumb-item"><a href="{{ url_for('receptionist.list_doctor') }}">Doctors</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Schedule</li>
+        </ol>
+    </nav>
+
+	<!-- ACTIONS -->
+	<section id="actions">
+	    <div class="container py-2 mb-3 bg-light">
+	        <div class="row">
+
+            <div class="col-md-3">
+		            <a href="{{ url_for('receptionist.list_doctor') }}" class="btn btn-light btn-block">
+		                <i class="fas fa-arrow-left"></i> Back
+		            </a>
+	            </div>
+
+	            <div class="col-md-3 ml-auto">
+	                <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addModal">
+	                    <i class="fas fa-plus"></i> Add Schedule
+	                </a>
+	            </div>
+
+	        </div>
+	    </div>
+	</section>
+
+	<section id="listSchedule">
+        <div class="card">
+
+	        <div class="card-header">
+                <i class="fas fa-table"></i><span> Schedule</span>
+	        </div>
+
+	        <div class="card-body">
+		        <div class="table-responsive">
+
+					<table id="dataTable" class="table table-striped">
+					    <thead class="thead-dark">
+					        <tr>
+						        <th>#</th>
+					            <th>Day</th>
+					            <th>Start Time</th>
+					            <th>End Time</th>
+						        <th></th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        {% for index, entry in schedules %}
+					            <tr>
+						            <th scope="row">{{ index+1 }}</th>
+						            <td>{{ entry.day | capitalize }}</td>
+					                <td>{{ entry.start_time.strftime('%I:%M %p') }}</td>
+					                <td>{{ entry.end_time.strftime('%I:%M %p') }}</td>
+						            <td>
+					                    <a href="{{ url_for('receptionist.edit_schedule', schedule_id=entry.id) }}" class="btn btn-warning">
+					                        <i class="fas fa-angle-double-right"></i> Edit
+					                    </a>
+						            </td>
+					            </tr>
+					        {% endfor %}
+					    </tbody>
+					</table>
+
+                </div>
+            </div>
+
+	    </div>
+	</section>
+
+	<!-- ADD SCHEDULE MODAL -->
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalCenterTitle" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header">
+					<h5 class="modal-title" id="addModalCenterTitle">Add Schedule</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+
+				{{ render_message() }}
+				<form method="POST">
+
+					{{ form.hidden_tag() }}
+					<div class="modal-body">
+
+						<div class="form-group">
+							{{ form.day.label }}
+							{{ form.day(class="form-control", id="select") }}
+						    {{ render_error(form.day) }}
+					    </div>
+
+						<div class="form-row">
+						    <div class="form-group col-md-6">
+								{{ form.start_time.label }}
+								{{ form.start_time(class="form-control") }}
+								{{ render_error(form.start_time) }}
+						    </div>
+						    <div class="form-group col-md-6">
+								{{ form.end_time.label }}
+								{{ form.end_time(class="form-control") }}
+								{{ render_error(form.end_time) }}
+						    </div>
+					    </div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						{{ form.submit(class="btn btn-primary px-4") }}
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block script %}
+
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+	    $('#dataTable').DataTable();
+	} );
+	</script>
+
+	<script>
+	$(document).ready(function() {
+		var err = $('#err').html()
+
+		if(err)
+		{
+	        $('#addModal').modal('show');
+	    }
+	    else
+	    {
+	        $('#addModal').modal('hide');
+	    }
+
+	    $('#select option:selected').attr('disabled','disabled')
+	});
+	</script>
+{% endblock %}

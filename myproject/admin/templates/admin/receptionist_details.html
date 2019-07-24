@@ -1,0 +1,153 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Receptionist Details{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+	        <li class="breadcrumb-item"><a href="{{ url_for('admin.list_doctor') }}">Receptionists</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Details</li>
+        </ol>
+    </nav>
+
+	<!-- ACTIONS -->
+	<section id="actions">
+	    <div class="container py-2 mb-3 bg-light">
+	        <div class="row">
+	            <div class="col-md-3">
+		            <a href="{{ url_for('admin.list_receptionist') }}" class="btn btn-light btn-block">
+		                <i class="fas fa-arrow-left"></i> Back
+		            </a>
+	            </div>
+
+	            <div class="col-md-3">
+		             <!--submit button for the form-->
+		             <button type="submit" form="updateForm" class="btn btn-success btn-block">
+			             <i class="fas fa-check"></i> Save Changes
+		             </button>
+	            </div>
+	            <div class="col-md-3">
+	                <a href="#" class="btn btn-danger btn-block" data-toggle="modal" data-target="#deleteModal">
+	                    <i class="fas fa-trash"></i> Delete Record
+	                </a>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+
+	<!-- EDIT DETAILS -->
+	<section id="details">
+	    <div class="container p-0">
+
+	        <div class="row">
+	            <div class="col">
+
+	                <div class="card">
+
+	                    <div class="card-header">
+					        <i class="fa fa-pencil-square-o"></i><span> Edit Details</span>
+				        </div>
+
+	                    <div class="card-body">
+
+		                    {{ render_message() }}
+		                    <form id="updateForm" method="POST">
+
+			                    {{ form.hidden_tag() }}
+
+								<div class="form-group">
+			                        <!--id field-->
+							        {{ form.id.label }}
+									{{ form.id(class="form-control", readonly='readonly') }}
+								</div>
+
+			                    <div class="form-row">
+								    <div class="form-group col-md-6">
+								        <!--name field-->
+										{{ form.name.label }}
+										{{ form.name(class="form-control", placeholder="Receptonists Name") }}
+										{{ render_error(form.name) }}
+								    </div>
+								    <div class="form-group col-md-6">
+								        <!--email field-->
+										{{ form.email.label }}
+										{{ form.email(class="form-control", placeholder="Example123@abc.com") }}
+										{{ render_error(form.email) }}
+								    </div>
+			                    </div>
+
+			                    <div class="form-group">
+								    <!--address field-->
+									{{ form.address.label }}
+									{{ form.address(class="form-control", placeholder="1234 Main St") }}
+									{{ render_error(form.address) }}
+			                    </div>
+
+								<div class="form-row">
+								    <div class="form-group col-md-6">
+								        <!--city field-->
+										{{ form.city.label }}
+										{{ form.city(class="form-control", placeholder="City") }}
+										{{ render_error(form.city) }}
+								    </div>
+								    <div class="form-group col-md-4">
+								        <!--gender field-->
+										{{ form.gender.label }}
+										{{ form.gender(class="form-control") }}
+										{{ render_error(form.gender) }}
+								    </div>
+								    <div class="form-group col-md-2">
+								        <!--dob field-->
+										{{ form.dob.label }}
+										{{ form.dob(class="form-control", placeholder="dd/mm/yyyy") }}
+										{{ render_error(form.dob) }}
+								    </div>
+								</div>
+
+			                    <div class="form-group">
+							        <!--contact field-->
+									{{ form.contact.label }}
+									{{ form.contact(class="form-control", placeholder="Contact Number") }}
+									{{ render_error(form.contact) }}
+			                    </div>
+
+			                </form>
+	                    </div>
+
+	                </div>
+
+	            </div>
+	        </div>
+
+	    </div>
+	</section>
+
+	<!-- DELETE MODAL -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header bg-danger">
+					<h5 class="modal-title" id="deleteModalCenterTitle">Confirm Delete</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+				<div class="modal-body">
+					Are you sure you want to delete the record from the database?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<form action="{{ url_for('admin.delete_receptionist', user_id=receptionist.user.id) }}", method="POST">
+						<input class="btn btn-danger" type="submit" value="Delete">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

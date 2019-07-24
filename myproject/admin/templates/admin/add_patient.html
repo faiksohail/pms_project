@@ -1,0 +1,85 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Add Patient{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Patient</li>
+        </ol>
+    </nav>
+
+	<section id="addPatient">
+        <div class="card mb-3">
+	        <div class="card-header">
+		        <i class="fas fa-table"></i><span> Add Patient</span>
+	        </div>
+            <div class="card-body">
+
+	            {{ render_message() }}
+	            <form method="POST">
+
+                    {{ form.hidden_tag() }}
+
+                    <div class="form-row">
+					    <div class="form-group col-md-6">
+					        <!--name field-->
+							{{ form.name.label }}
+							{{ form.name(class="form-control", placeholder="Patients Name") }}
+							{{ render_error(form.name) }}
+					    </div>
+					    <div class="form-group col-md-6">
+					        <!--email field-->
+							{{ form.email.label }}
+							{{ form.email(class="form-control", placeholder="Example123@abc.com") }}
+							{{ render_error(form.email) }}
+					    </div>
+                    </div>
+
+                    <div class="form-group">
+					    <!--address field-->
+						{{ form.address.label }}
+						{{ form.address(class="form-control", placeholder="1234 Main St") }}
+						{{ render_error(form.address) }}
+                    </div>
+
+					<div class="form-row">
+					    <div class="form-group col-md-6">
+					        <!--city field-->
+							{{ form.city.label }}
+							{{ form.city(class="form-control", placeholder="City") }}
+							{{ render_error(form.city) }}
+					    </div>
+					    <div class="form-group col-md-4">
+					        <!--gender field-->
+							{{ form.gender.label }}
+							{{ form.gender(class="form-control") }}
+							{{ render_error(form.gender) }}
+					    </div>
+					    <div class="form-group col-md-2">
+					        <!--dob field-->
+							{{ form.dob.label }}
+							{{ form.dob(class="form-control", placeholder="dd/mm/yyyy") }}
+							{{ render_error(form.dob) }}
+					    </div>
+					</div>
+
+                    <div class="form-group">
+				        <!--contact field-->
+						{{ form.contact.label }}
+						{{ form.contact(class="form-control", placeholder="Contact Number") }}
+						{{ render_error(form.contact) }}
+                    </div>
+                    <!--submit field-->
+	                {{ form.submit(class="btn btn-primary mt-3") }}
+                </form>
+            </div>
+        </div>
+	</section>
+
+{% endblock %}

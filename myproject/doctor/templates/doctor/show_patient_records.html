@@ -1,0 +1,386 @@
+{% extends 'doctor/base_doctor.html' %}
+
+{% block title %}Appointments{% endblock %}
+
+{% block content %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb shadow-sm">
+            <li class="breadcrumb-item"><a href="{{ url_for('doctor.index') }}">Dashboard</a></li>
+	        <li class="breadcrumb-item"><a href="{{ url_for('doctor.search_patient') }}">Search Patient</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Patient</li>
+        </ol>
+    </nav>
+
+	<!-- ACTIONS -->
+	<section id="actions">
+	    <div class="container py-2 mb-3 bg-light">
+	        <div class="row">
+
+	            <div class="col-md-4 offset-md-4">
+	                <a href="{{ url_for('doctor.show_patient', patient_id=record.patient.id) }}" class="btn btn-light btn-block">
+	                    <i class="fas fa-arrow-left"></i> Back
+	                </a>
+	            </div>
+
+	        </div>
+	    </div>
+	</section>
+
+	<section id="patientDetails">
+		<div class="card border-0 shadow-sm mt-3">
+
+	        <div class="card-body">
+				<h5 class="card-title">{{ record.appointment.date_of_visit.strftime('%A, %d %B') }}<span class="float-right">Dr. {{ record.appointment.doctor.name }}</span></h5>
+
+		        <hr>
+
+		        <div class="row">
+
+			        <div class="col-md-6">
+
+				        <div class="d-flex flex-row">
+					        <div class="p-2">
+						        <h1 class="display-4"><i class="fas fa-user-circle"></i></h1>
+					        </div>
+
+		                    <div class="p-2">
+			                    <h3>{{ record.patient.name }}</h3>
+			                    <span><strong>Patient ID : </strong>{{ record.patient.user_id }}</span>
+		                    </div>
+				        </div>
+
+			        </div>
+
+			        <div class="col-md-6">
+
+				        <dl class="row p-2">
+
+							<dt class="col-4 offset-md-3">Date of Birth:</dt>
+							<dd class="col-5">{{ record.patient.dob.strftime('%d-%m-%Y') }}</dd>
+
+							<dt class="col-4 offset-md-3">Gender:</dt>
+							<dd class="col-5">{{ record.patient.gender | capitalize }}</dd>
+				        </dl>
+
+			        </div>
+
+		        </div>
+
+	        </div>
+
+		</div>
+	</section>
+
+	<section id="medicalRecord">
+
+		<!--records-->
+		<div class="card border-0 shadow-sm mt-3">
+
+	        <div class="card-body">
+				<h5 class="card-title">Report</h5>
+
+		        <hr>
+
+		        <dl class="row">
+
+					<dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">Symptoms</span>
+						<p class="text-muted">
+							{% if record.symptoms %}
+								{{ record.symptoms }}
+							{% else %}
+								No information
+							{% endif %}
+						</p>
+					</dd>
+
+			        <dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">Disease</span>
+						<p class="text-muted">
+							{% if record.disease %}
+								{{ record.disease }}
+							{% else %}
+								No information
+							{% endif %}
+						</p>
+					</dd>
+
+			        <dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">Description</span>
+						<p class="text-muted">
+							{% if record.description %}
+								{{ record.description }}
+							{% else %}
+								No information
+							{% endif %}
+						</p>
+					</dd>
+
+		        </dl>
+
+	        </div>
+
+		</div>
+
+		<!--vitals-->
+		<div class="card border-0 shadow-sm mt-3">
+
+	        <div class="card-body">
+				<h5 class="card-title">Vitals</h5>
+
+		        <hr>
+
+		        <dl class="row">
+
+					<dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">BP Systolic</span>
+						<p class="text-muted">
+							{% set bp_systolic = vital.bp_systolic %}
+
+							{% if bp_systolic %}
+								{{ bp_systolic }}
+
+								{% if bp_systolic < 70 %}
+									{% set bar_class = 'bg-primary' %}
+
+								{% elif bp_systolic > 70 and bp_systolic < 90 %}
+									{% set bar_class = 'bg-info' %}
+
+								{% elif bp_systolic >= 90 and bp_systolic <=120 %}
+									{% set bar_class = 'bg-success' %}
+
+								{% elif bp_systolic > 120 and bp_systolic <= 160 %}
+									{% set bar_class = 'bg-warning' %}
+
+								{% elif bp_systolic > 160 %}
+									{% set bar_class = 'bg-danger' %}
+
+								{% endif %}
+
+								<div class="progress">
+								    <div class="progress-bar progress-bar-striped {{ bar_class }}" role="progressbar" style="width: {{ bp_systolic*100/240 }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+
+							{% else %}
+								No information
+							{% endif %}
+
+						</p>
+
+					</dd>
+
+			        <dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">BP Diastolic</span>
+						<p class="text-muted">
+							{% set bp_diastolic = vital.bp_diastolic %}
+
+							{% if bp_diastolic %}
+								{{ bp_diastolic }}
+
+								{% if bp_diastolic < 40 %}
+									{% set bar_class = 'bg-primary' %}
+
+								{% elif bp_diastolic > 40 and bp_diastolic < 60 %}
+									{% set bar_class = 'bg-info' %}
+
+								{% elif bp_diastolic >= 60 and bp_diastolic <=80 %}
+									{% set bar_class = 'bg-success' %}
+
+								{% elif bp_diastolic > 80 and bp_diastolic <= 100 %}
+									{% set bar_class = 'bg-warning' %}
+
+								{% elif bp_diastolic > 100 %}
+									{% set bar_class = 'bg-danger' %}
+
+								{% endif %}
+
+								<div class="progress">
+								    <div class="progress-bar progress-bar-striped {{ bar_class }}" role="progressbar" style="width: {{ bp_diastolic*100/160 }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+
+							{% else %}
+								No information
+							{% endif %}
+
+						</p>
+					</dd>
+
+			        <dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">Temperature</span>
+						<p class="text-muted">
+							{% if vital.temperature %}
+								{{ vital.temperature }} <span>&#176;</span>F
+							{% else %}
+								No information
+							{% endif %}
+						</p>
+					</dd>
+
+			        <dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">Pulse</span>
+						<p class="text-muted">
+							{% if vital.pulse %}
+								{{ vital.pulse }} bpm
+							{% else %}
+								No information
+							{% endif %}
+						</p>
+					</dd>
+
+			        <dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">Weight</span>
+						<p class="text-muted">
+							{% if vital.weight %}
+								{{ vital.weight }} Kg
+							{% else %}
+								No information
+							{% endif %}
+						</p>
+					</dd>
+
+			        <dt class="col-1"><i class="far fa-hand-point-right text-muted"></i></dt>
+					<dd class="col-11">
+						<span class="font-weight-bold">Height</span>
+						<p class="text-muted">
+							{% if vital.height %}
+								{{ vital.height }} cm
+							{% else %}
+								No information
+							{% endif %}
+						</p>
+					</dd>
+
+		        </dl>
+
+	        </div>
+
+		</div>
+
+		<!--prescription-->
+		<div class="card border-0 shadow-sm mt-3">
+
+	        <div class="card-body">
+	            <h5 class="card-title">Prescription</h5>
+
+		        <hr>
+
+		        <div class="table-responsive">
+
+		            <table class="table table-borderless">
+					    <thead>
+						    <tr>
+						        <th scope="col">#</th>
+						        <th scope="col">Name</th>
+						        <th scope="col">Quantity</th>
+						        <th scope="col">Directions</th>
+						    </tr>
+					    </thead>
+
+					    <tbody>
+					        {% for entry in prescription %}
+					        <tr>
+						        <th scope="row">{{ loop.index }}</th>
+						        <td>{{ entry.name | capitalize }}</td>
+						        <td>{{ entry.quantity }}</td>
+						        <td>{{ entry.directions | capitalize }}</td>
+					        </tr>
+					        {% endfor %}
+					    </tbody>
+					</table>
+
+		        </div>
+
+	        </div>
+		</div>
+
+		<!--tests-->
+		<div class="card border-0 shadow-sm mt-3">
+
+	        <div class="card-body">
+	            <h5 class="card-title">Tests</h5>
+
+		        <hr>
+
+		        <div class="table-responsive">
+
+		            <table class="table table-borderless">
+					    <thead>
+						    <tr>
+						        <th scope="col">#</th>
+						        <th scope="col">Name</th>
+						        <th scope="col">Details</th>
+							    <th scope="col">File</th>
+						    </tr>
+					    </thead>
+
+					    <tbody>
+					        {% for entry in test %}
+					        <tr>
+						        <th scope="row">{{ loop.index }}</th>
+						        <td>{{ entry.name | capitalize }}</td>
+						        <td>{{ entry.details | capitalize }}</td>
+						        <td>
+							        {% if entry.report %}
+							            <a href="" id="show{{ entry.id }}" class="badge badge-success" data-toggle="modal" data-target="#showModal">
+								            Open
+							            </a>
+							        {% else %}
+							           No File uploaded
+							        {% endif %}
+						        </td>
+					        </tr>
+					        {% endfor %}
+					    </tbody>
+					</table>
+
+		        </div>
+
+	        </div>
+		</div>
+
+	</section>
+
+	<div class="modal fade" id="showModal" aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+		    <div class="modal-content">
+
+		        <div class="modal-header">
+		            <h5 class="modal-title">Report</h5>
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
+		            </button>
+		        </div>
+
+	            <div class="modal-body">
+					 <img id="report_pic" src="" class="card-img">
+		        </div>
+
+		    </div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block script %}
+	<script>
+	{% for entry in test if test %}
+		{% if entry.report.filename %}
+			$('#show{{ entry.id }}').click(function() {
+
+				$('#showModal #report_pic').attr("src", "{{ url_for('static', filename='uploads/' + entry.report.filename) }}");
+
+			});
+		{% endif %}
+	{% endfor %}
+	</script>
+{% endblock %}

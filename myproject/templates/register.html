@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+    <nav id="topNavbar" class="navbar navbar-expand-sm shadow-sm">
+        <span class="navbar-brand mb-0 h1">
+            <img src="{{ url_for('static', filename='images/icon.jpg') }}"  class="brand-img d-inline-block align-top" alt="">
+            C-PMS
+        </span>
+	    <ul class="navbar-nav ml-auto">
+			<li class="nav-item mr-4">
+                <a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            </li>
+		</ul>
+	</nav>
+
+    <section id="register" class="py-5">
+        <div class="container">
+            <div class="row">
+
+	            <div class="col-md-12">
+		            <div class="card border-0 shadow-sm">
+
+						<div class="card-body">
+
+				            <form method="POST">
+
+								<h3 class="display-5 text-center">Register</h3>
+					            <hr>
+
+					            {{ render_message() }}
+
+					            {{ form.hidden_tag() }}
+
+							    <div class="form-group">
+							        <!--name field-->
+									{{ form.name.label }}
+									{{ form.name(class="form-control", placeholder="Patients Name") }}
+									{{ render_error(form.name) }}
+							    </div>
+
+							    <div class="form-group">
+							        <!--email field-->
+									{{ form.email.label }}
+									{{ form.email(class="form-control", placeholder="Example123@abc.com") }}
+									{{ render_error(form.email) }}
+							    </div>
+
+			                    <div class="form-group">
+								    <!--address field-->
+									{{ form.address.label }}
+									{{ form.address(class="form-control", placeholder="1234 Main St") }}
+									{{ render_error(form.address) }}
+			                    </div>
+
+								<div class="form-row">
+								    <div class="form-group col-md-6">
+								        <!--city field-->
+										{{ form.city.label }}
+										{{ form.city(class="form-control", placeholder="City") }}
+										{{ render_error(form.city) }}
+								    </div>
+								    <div class="form-group col-md-4">
+								        <!--gender field-->
+										{{ form.gender.label }}
+										{{ form.gender(class="form-control") }}
+										{{ render_error(form.gender) }}
+								    </div>
+								    <div class="form-group col-md-2">
+								        <!--dob field-->
+										{{ form.dob.label }}
+										{{ form.dob(class="form-control", placeholder="dd/mm/yyyy") }}
+										{{ render_error(form.dob) }}
+								    </div>
+								</div>
+
+			                    <div class="form-group">
+							        <!--contact field-->
+									{{ form.contact.label }}
+									{{ form.contact(class="form-control", placeholder="Contact Number") }}
+									{{ render_error(form.contact) }}
+			                    </div>
+			                    <!--submit field-->
+				                {{ form.submit(class="btn btn-primary btn-block mt-3") }}
+			                </form>
+			            </div>
+
+		            </div>
+
+	            </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

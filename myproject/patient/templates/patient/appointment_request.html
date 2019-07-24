@@ -1,0 +1,60 @@
+{% extends 'patient/base_patient.html' %}
+
+{% block title %}Appointment Request{% endblock %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+{% block content %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('patient.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Appointment Request</li>
+        </ol>
+    </nav>
+
+	<section id="appointmentForm">
+
+		<div class="card border-0 shadow-sm mt-3">
+
+	        <div class="card-body">
+				<h5 class="card-title">Make Appointment</h5>
+
+		        <hr>
+
+		        {{ render_message() }}
+			        <form method="POST">
+
+				        {{ form.hidden_tag() }}
+
+				         <div class="form-group">
+							{{ form.date.label }}
+							{{ form.date(class="form-control", readonly="readonly") }}
+							{{ render_error(form.date) }}
+					    </div>
+
+				        <div class="form-group">
+							{{ form.doctor.label }}
+							{{ form.doctor(class="form-control") }}
+							{{ render_error(form.doctor) }}
+				        </div>
+
+	                    <div class="form-group">
+							{{ form.visit_reason.label }}
+							{{ form.visit_reason(class="form-control") }}
+							{{ render_error(form.visit_reason) }}
+	                    </div>
+
+				        <div class="form-group">
+					        {{ form.submit(class="btn btn-primary") }}
+				        </div>
+
+			        </form>
+	        </div>
+
+		</div>
+
+	</section>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'receptionist/base_receptionist.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+    <!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('receptionist.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Overview</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Welcome to PMS</h1>
+            <p class="lead">RECEPTIONIST HOME PAGE</p>
+        </div>
+    </div>
+
+{% endblock %}

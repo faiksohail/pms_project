@@ -1,0 +1,89 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css"/>
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block title %}Patients{% endblock %}
+
+{% block content %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Patients</li>
+        </ol>
+    </nav>
+
+	<section id="listPatients">
+        <div class="card">
+
+            <div class="card-header">
+            <i class="fas fa-table"></i><span> Patients</span>
+	        </div>
+
+            <div class="card-body">
+	            <div class="table-responsive">
+
+					<table id="dataTable" class="table table-striped">
+					    <thead class="thead-dark">
+					        <tr>
+					            <th>Id</th>
+					            <th>Name</th>
+					            <th>Gender</th>
+					            <th>Address</th>
+						        <th>City</th>
+					            <th>DOB</th>
+					            <th>Contact</th>
+						        <th></th>
+						        <th></th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        {% for patient in patients %}
+					            <tr>
+						            <th scope="row">{{ patient.user_id }}</th>
+						            <td>{{ patient.name }}</td>
+					                <td>{{ patient.gender }}</td>
+					                <td>{{ patient.address }}</td>
+						            <td>{{ patient.city }}</td>
+					                <td>{{ patient.dob.strftime('%d-%m-%Y') }}</td>
+					                <td>{{ patient.contact }}</td>
+						            <td>
+							            <a href="{{ url_for('admin.patient_details', user_id=patient.user_id) }}" class="btn btn-secondary">
+								            <i class="fas fa-angle-double-right"></i> Details
+							            </a>
+						            </td>
+						            <td>
+							            <a href="{{ url_for('admin.patient_appointments', patient_id=patient.id) }}" class="btn btn-warning">
+								            <i class="fas fa-angle-double-right"></i> Appointments
+							            </a>
+						            </td>
+					            </tr>
+					        {% endfor %}
+					    </tbody>
+					</table>
+
+	            </div>
+            </div>
+
+        </div>
+	</section>
+
+{% endblock %}
+
+{% block script %}
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+	    $('#dataTable').DataTable();
+	} );
+	</script>
+{% endblock %}
+

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+{% block body %}
+
+	<nav id="topNavbar" class="navbar navbar-expand-sm shadow-sm">
+        <span class="navbar-brand mb-0 h1">
+            <img src="{{ url_for('static', filename='images/icon.jpg') }}" class="brand-img d-inline-block align-top" alt="">
+            C-PMS
+        </span>
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item mr-4">
+                <a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            </li>
+		</ul>
+	</nav>
+
+	<section id="login">
+		<div class="container">
+
+			<div clas="row">
+				<div class="col-md-6 offset-md-3">
+					<div class="card mt-5 border-0 shadow-sm">
+
+						<div class="card-body">
+							<form method="POST">
+
+						        <h3 class="display-5 text-center">Admin Login</h3>
+						        <hr>
+
+								{{ render_message() }}
+
+								{{form.hidden_tag() }}
+
+								<div class="form-group">
+									{{ form.email.label }}
+									{{ form.email(class="form-control", placeholder="Enter email") }}
+									{{ render_error(form.email) }}
+								</div>
+
+								<div class="form-group">
+									{{ form.password.label }}
+									{{ form.password(class="form-control", placeholder="Enter password") }}
+									{{ render_error(form.password) }}
+
+									<span id="passwordHelpBlock" class="help-block"><a class="card-link" href="{{ url_for('forgot_password') }}">Forgot Password?</a></span>
+								</div>
+
+						        <div class="form-group form-check">
+									{{ form.remember_me(class="form-check-input") }}
+									{{ form.remember_me.label(class="form-check-label") }}
+						        </div>
+
+						        <div class="form-group mt-5">
+									{{ form.login(class="btn btn-primary btn-block") }}
+								</div>
+
+							 </form>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+{% endblock %}

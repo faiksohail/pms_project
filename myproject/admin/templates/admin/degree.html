@@ -1,0 +1,171 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css"/>
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block title %}Degree{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	{{ render_message() }}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Degree</li>
+        </ol>
+    </nav>
+
+	<!-- ACTIONS -->
+	<section id="actions">
+	    <div class="container-fluid py-2 mb-3 bg-light">
+	        <div class="row justify-content-center">
+
+		        <div class="col-md-3">
+		           <!--add button-->
+					<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#add_Modal">
+						Add Degree
+					</button>
+		        </div>
+
+	        </div>
+	    </div>
+	</section>
+
+	<section id="listDegrees">
+        <div class="card">
+
+            <div class="card-header">
+            <i class="fas fa-table"></i><span> Degrees</span>
+	        </div>
+
+            <div class="card-body">
+	            <div class="table-responsive">
+
+					<table id="dataTable" class="table table-striped">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Degrees</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for degree in degrees %}
+						<tr>
+							<td>{{ loop.index }}</td>
+							<td>{{ degree.name }}</td>
+							<td>
+								<button type="button" id="delete{{ degree.id }}" class="btn btn-danger" data-toggle="modal" data-target="#delete_Modal">
+									<i class="fas fa-trash"></i> Delete
+								</button>
+							</td>
+						</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+
+	            </div>
+            </div>
+
+        </div>
+	</section>
+
+	<!-- add Modal -->
+	<div class="modal fade" id="add_Modal" tabindex="-1" role="dialog" aria-labelledby="addModalCenterTitle" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header bg-success">
+					<h5 class="modal-title" id="addModalCenterTitle">Add Degree</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+
+				<form method="POST">
+					<div class="modal-body">
+
+						{{ form.hidden_tag() }}
+
+						<!--new_specialization field-->
+						{{ form.new_degree.label(class="col-sm-2 col-form-label mt-9") }}
+						{{ form.new_degree(class="form-control", placeholder="abcd") }}
+						{{ render_error(form.new_degree) }}
+
+					</div>
+					<div class="modal-footer">
+						 <!--submit field-->
+						{{ form.add_btn(class="btn btn-success") }}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- delete Modal for a specialization-->
+	<div class="modal fade" id="delete_Modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header bg-danger">
+					<h5 class="modal-title" id="deleteModalCenterTitle">Confirm Delete</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+				<div class="modal-body">
+					Are you sure you want to delete the Degree?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<form id="deleteForm" method="POST">
+						<input class="btn btn-danger" type="submit" value="Delete">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}
+
+{% block script %}
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+	    $('#dataTable').DataTable();
+	} );
+	</script>
+
+	<script>
+	$(document).ready(function () {
+		var err = $('#err').text();
+		if (err)
+		{
+			$("#add_Modal").modal('show');
+		}
+		else
+		{
+			$("#add_Modal").modal('hide');
+		}
+	});
+	</script>
+
+	<script>
+	{% for degree in degrees if degrees %}
+		$('#delete{{ degree.id }}').click(function() {
+
+			$('#deleteForm').attr('action', '{{ url_for('admin.delete_degree', dg_id=degree.id) }}');
+
+		});
+	{% endfor %}
+	</script>
+{% endblock %}

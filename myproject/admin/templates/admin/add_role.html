@@ -1,0 +1,206 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb shadow-sm">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.users') }}">Users</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Role</li>
+        </ol>
+    </nav>
+
+	<!-- ACTIONS -->
+	<section id="actions">
+	    <div class="container-fluid py-2 mb-3 bg-light">
+	        <div class="row">
+
+		        <div class="col-md-3">
+		            <a href="{{ url_for('admin.users') }}" class="btn btn-light btn-block">
+		                <i class="fas fa-arrow-left"></i> Back
+		            </a>
+	            </div>
+
+		        <div class="col-md-3">
+					<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#add_Modal">
+						Add Role
+					</button>
+		        </div>
+
+	        </div>
+	    </div>
+	</section>
+
+	<section id="basicDetails">
+        <div class="card border-0 shadow-sm">
+
+	        <div class="card-body">
+		        <div class="row">
+
+			        <div class="col-md-5">
+				        <div class="row">
+
+					        <div class="col-4">
+						        <div class="d-flex justify-content-center">
+						            <h1 class="display-1"><i class="fas fa-user-circle"></i></h1>
+					            </div>
+					        </div>
+
+					        <div class="col">
+						        <div class="m-1">
+									<h3>{{ person.name }}</h3>
+							        <span><strong>User ID :</strong> {{ person.user_id }}</span>
+						        </div>
+					        </div>
+
+				        </div>
+
+			        </div>
+
+			        <div class="col-md-7">
+						<dl class="row">
+
+							<dt class="col-sm-4">Phone:</dt>
+							<dd class="col-sm-8">{{ person.contact }}</dd>
+
+							<dt class="col-sm-4">Email:</dt>
+							<dd class="col-sm-8">{{ person.user.email }}</dd>
+
+							<dt class="col-sm-4">Date of Birth:</dt>
+							<dd class="col-sm-8">{{ person.dob.strftime('%d-%m-%Y') }}</dd>
+
+							<dt class="col-sm-4">Address:</dt>
+							<dd class="col-sm-8">{{ person.address }}, {{ person.city }}</dd>
+
+							<dt class="col-sm-4">Gender:</dt>
+							<dd class="col-sm-8">{{ person.gender | capitalize}}</dd>
+
+						</dl>
+			        </div>
+
+		        </div>
+
+	        </div>
+
+        </div>
+	</section>
+
+	<section id="listRoles">
+        <div class="card border-0 shadow-sm mt-3">
+
+            <div class="card-header">
+            <i class="fas fa-table"></i><span> Roles</span>
+	        </div>
+
+            <div class="card-body">
+	            <div class="table-responsive">
+
+					<table id="dataTable" class="table table-striped">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Role</th>
+								{% if role_count != 1 %}
+								<th scope="col"></th>
+								{% endif %}
+							</tr>
+						</thead>
+						<tbody>
+						{% for role in user.role %}
+						<tr>
+							<td>{{ loop.index }}</td>
+							<td>{{ role.role | capitalize }}</td>
+							{% if role_count != 1 %}
+							<td>
+								<button type="button" id="delete{{ role.id }}" class="btn btn-danger" data-toggle="modal" data-target="#delete_Modal">
+									<i class="fas fa-trash"></i> Remove
+								</button>
+							</td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+
+	            </div>
+            </div>
+
+        </div>
+	</section>
+
+	<!-- add Modal -->
+	<div class="modal fade" id="add_Modal" tabindex="-1" role="dialog" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header bg-success">
+					<h5 class="modal-title">Add Role</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+
+				<form method="POST">
+					<div class="modal-body">
+
+						{{ form.hidden_tag() }}
+
+						<div class="form-group">
+					        {{ form.role.label }}
+					        {{ form.role(class="form-control", id="filter") }}
+					        {{ render_error(form.role) }}
+				        </div>
+
+					</div>
+					<div class="modal-footer">
+						{{ form.submit(class="btn btn-dark") }}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- delete Modal-->
+	<div class="modal fade" id="delete_Modal" tabindex="-1" role="dialog" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+		        <div class="modal-header bg-danger">
+					<h5 class="modal-title">Confirm Delete</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				        <span aria-hidden="true">&times;</span>
+					</button>
+		        </div>
+				<div class="modal-body">
+					Are you sure you want to delete the Role?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<form id="deleteForm" method="POST">
+						<input class="btn btn-danger" type="submit" value="Delete">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block script %}
+	<script>
+	    $('#filter option:first').attr('disabled', 'disabled');
+	</script>
+
+	<script>
+	{% for role in user.role %}
+		$('#delete{{ role.id }}').click(function() {
+
+			$('#deleteForm').attr('action', '{{ url_for('admin.delete_role', user_id=user.id, role_id=role.id) }}');
+
+		});
+	{% endfor %}
+	</script>
+{% endblock %}

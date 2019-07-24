@@ -1,0 +1,108 @@
+{% extends 'doctor/base_doctor.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('doctor.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Search Patient</li>
+        </ol>
+    </nav>
+
+	<section id="search">
+		<div class="card border-0 shadow-sm mt-3">
+
+	        <div class="card-body">
+				<h5 class="card-title">Search patient</h5>
+
+		        <hr>
+
+				{{ render_message() }}
+		        <form method="POST">
+
+			        {{ form.hidden_tag() }}
+
+			        <div class="form-row">
+				        <div class="form-group col-md-7">
+					        {{ form.search(class="form-control", placeholder="Search...") }}
+					        {{ render_error(form.search) }}
+				        </div>
+
+				        <div class="form-group col-md-3">
+					         {{ form.filter(class="form-control", id="filter") }}
+					        {{ render_error(form.filter) }}
+				        </div>
+
+				        <div class="form-group col-md-2">
+					         {{ form.submit(class="btn btn-outline-dark") }}
+			            </div>
+
+			        </div>
+
+		        </form>
+
+		        {% if search_result %}
+		        <h5 class="card-title text-center text-muted">Search Results</h5>
+
+		        <div class="table-responsive">
+
+					<table id="dataTable" class="table table-striped">
+					    <thead class="thead-dark">
+					        <tr>
+						        <th>Id</th>
+					            <th>Name</th>
+					            <th>Gender</th>
+					            <th>Email</th>
+					            <th>DOB</th>
+					            <th>Contact</th>
+						        <th>Actions</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+
+					        {% for patient in search_result %}
+					            <tr>
+						            <th scope="row">{{ patient.user_id }}</th>
+						            <td>{{ patient.name }}</td>
+					                <td>{{ patient.gender }}</td>
+					                <td>{{ patient.user.email }}</td>
+						             <td>{{ patient.dob.strftime('%d-%m-%Y') }}</td>
+					                <td>{{ patient.contact }}</td>
+					                <td>
+										 <a href="{{ url_for('doctor.show_patient', patient_id=patient.id) }}" class="btn btn-secondary">
+					                        <i class="fas fa-angle-double-right"></i> Details
+					                    </a>
+					                </td>
+					            </tr>
+					        {% endfor %}
+
+					    </tbody>
+					</table>
+
+                </div>
+
+		        {% elif search_result == 0 %}
+		            <h5 class="card-title text-center text-muted">Search for a patient...</h5>
+
+		        {% else %}
+		            <h5 class="card-title text-center text-muted">No data Found</h5>
+
+		        {% endif %}
+
+	        </div>
+
+		</div>
+	</section>
+
+{% endblock %}
+
+{% block script %}
+	<script>
+	    $('#filter option:first').attr('disabled', 'disabled');
+	</script>
+{% endblock %}

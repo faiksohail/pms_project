@@ -1,0 +1,80 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css"/>
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block title %}Receptionists{% endblock %}
+
+{% block content %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Receptionists</li>
+        </ol>
+    </nav>
+
+	<section id="listReceptionists">
+        <div class="card">
+
+	        <div class="card-header">
+            <i class="fas fa-table"></i><span> Receptionists</span>
+	        </div>
+
+			<div class="card-body">
+				<div class="table-responsive">
+
+					<table id="dataTable" class="table table-striped">
+					    <thead class="thead-dark">
+					        <tr>
+						        <th>Id</th>
+					            <th>Name</th>
+					            <th>Gender</th>
+					            <th>Address</th>
+						        <th>City</th>
+					            <th>Contact</th>
+						        <th></th>
+					        </tr>
+					    </thead>
+						<tbody>
+						    {% for receptionist in receptionists %}
+						        <tr>
+						            <th scope="row">{{ receptionist.user_id }}</th>
+						            <td>{{ receptionist.name }}</td>
+						            <td>{{ receptionist.gender }}</td>
+						            <td>{{ receptionist.address }}</td>
+						            <td>{{ receptionist.city }}</td>
+						            <td>{{ receptionist.contact }}</td>
+						            <td>
+							            <a href="{{ url_for('admin.receptionist_details', user_id=receptionist.user_id) }}" class="btn btn-secondary">
+								            <i class="fas fa-angle-double-right"></i> Details
+							            </a>
+						            </td>
+						        </tr>
+						    {% endfor %}
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+
+        </div>
+	</section>
+
+{% endblock %}
+
+{% block script %}
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+	    $('#dataTable').DataTable();
+	} );
+	</script>
+{% endblock %}

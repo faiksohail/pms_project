@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Email confirmation% endblock %}
+
+{% block body %}
+
+{% from "_formhelpers.html" import render_error, render_message %}
+
+    <div class="jumbotron">
+        <h1 class="display-4">{{ render_message() }}</h1>
+        <p class="lead">click on the link here to get to the login page.<br>
+        <a href="url_for('index')">click here</a>
+        </p>
+    </div>
+
+{% endblock %}

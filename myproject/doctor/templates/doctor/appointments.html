@@ -1,0 +1,101 @@
+{% extends 'doctor/base_doctor.html' %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css"/>
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block title %}Appointments{% endblock %}
+
+{% block content %}
+
+	<!--breadcrum-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('doctor.index') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Appointments</li>
+        </ol>
+    </nav>
+
+	<section id="listAppointments">
+        <div class="card">
+
+	        <div class="card-header">
+                <i class="fas fa-table"></i><span> Appointments</span>
+	        </div>
+
+	        <div class="card-body">
+		        <div class="table-responsive">
+
+					<table id="dataTable" class="table table-striped">
+					    <thead class="thead-dark">
+					        <tr>
+						        <th>#</th>
+						        <th>Date</th>
+						        <th>Patient</th>
+					            <th>Start Time</th>
+						        <th>End Time</th>
+						        <th>Status</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        {% for appointment in appointments %}
+					            <tr>
+						            <th scope="row">{{ loop.index }}</th>
+						            <td>{{ appointment.date_of_visit.strftime('%a, %d %B') }}</td>
+						            <td>
+							             <a class="text-decoration-none" href="{{ url_for('doctor.patient_details', patient_id=appointment.patient.id, appointment_id=appointment.id) }}">
+								             {{ appointment.patient.name }}
+							             </a>
+						            </td>
+					                <td>{{ appointment.start_time.strftime('%I:%M %p') }}</td>
+					                <td>{{ appointment.end_time.strftime('%I:%M %p') }}</td>
+					                <td>
+								        <div class="btn-group" role="group">
+							                <button type="button" class="btn btn-secondary">
+										        {% if appointment.status == 0 %}
+								                    <i class="fas fa-clock"></i> Pending
+								                {% elif appointment.status == 1 %}
+								                    <i class="fas fa-check"></i> Checked
+								                {% else %}
+								                    <i class="fas fa-times"></i> Cancelled
+								                {% endif %}
+										    </button>
+							                <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											    <span class="sr-only">Toggle Dropdown</span>
+							                </button>
+
+										    <div class="dropdown-menu">
+											    <a class="dropdown-item" href="{{ url_for('doctor.change_appointment_status', appointment_id=appointment.id, status=0) }}">Pending</a>
+											    <a class="dropdown-item" href="{{ url_for('doctor.change_appointment_status', appointment_id=appointment.id, status=1) }}">Checked</a>
+											    <a class="dropdown-item" href="{{ url_for('doctor.change_appointment_status', appointment_id=appointment.id, status=2) }}">Cancelled</a>
+										    </div>
+
+
+										  </div>
+					                </td>
+					            </tr>
+					        {% endfor %}
+					    </tbody>
+					</table>
+
+                </div>
+	        </div>
+
+        </div>
+	</section>
+
+{% endblock %}
+
+{% block script %}
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+		    $('#dataTable').DataTable();
+		} );
+	</script>
+{% endblock %}
