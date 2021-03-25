@@ -42,7 +42,7 @@ python-dateutil==2.7.5
 python-editor==1.0.3
 pytz==2018.9
 pywin32==224
-PyYAML==3.13
+PyYAML==5.4
 requests==2.20.1
 scramp==1.1.0
 semantic-version==2.5.0
