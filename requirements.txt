@@ -31,7 +31,7 @@ intervals==0.8.1
 itsdangerous==1.1.0
 Jinja2==2.10
 jmespath==0.9.4
-Mako==1.0.7
+Mako==1.2.2
 MarkupSafe==1.1.0
 mysql-connector==2.2.9
 passlib==1.7.1
